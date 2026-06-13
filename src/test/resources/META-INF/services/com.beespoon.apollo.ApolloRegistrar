@@ -1,0 +1,3 @@
+com.beespoon.apollo.testdata.FailingRegistrar
+com.beespoon.apollo.testdata.ServiceRegistrar
+com.beespoon.apollo.testdata.SecondaryServiceRegistrar
