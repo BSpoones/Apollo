@@ -9,7 +9,7 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
-group = "com.beespoon"
+group = "com.bee-spoon"
 
 version = findProperty("version")?.toString()?.takeUnless { it == "unspecified" } ?: "1.0"
 
@@ -89,7 +89,7 @@ mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
 
-    coordinates("com.beespoon", "apollo", project.version.toString())
+    coordinates("com.bee-spoon", "apollo", project.version.toString())
 
     pom {
         name.set("Apollo")
