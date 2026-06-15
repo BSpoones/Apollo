@@ -7,6 +7,7 @@ plugins {
     id("org.jetbrains.kotlinx.kover") version "0.9.1"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3"
     id("com.vanniktech.maven.publish") version "0.30.0"
+    signing
 }
 
 group = "com.beespoon"
@@ -87,9 +88,7 @@ tasks.named("check") {
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    signing {
-        useGpgCmd()
-    }
+    signAllPublications()
 
     coordinates("com.beespoon", "apollo", project.version.toString())
 
@@ -118,4 +117,8 @@ mavenPublishing {
             url.set("https://github.com/BSpoones/Apollo")
         }
     }
+}
+
+signing {
+    useGpgCmd()
 }
