@@ -87,7 +87,9 @@ tasks.named("check") {
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    signAllPublications()
+    signing {
+        useGpgCmd()
+    }
 
     coordinates("com.beespoon", "apollo", project.version.toString())
 
