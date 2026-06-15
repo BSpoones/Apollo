@@ -1,4 +1,4 @@
-name: CI
+name: Test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,13 +19,12 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Test
+        run: ./gradlew test
 
       - name: Test summary
         if: always()
@@ -73,14 +72,3 @@ jobs:
         with:
           name: coverage-report
           path: build/reports/kover/html/
-
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: |
-            build/libs/*.jar
-            build/publications/
-
-# Publishing happens only from release.yml on version tags — republishing a fixed
-# version on every main push would 409 against GitHub Packages.

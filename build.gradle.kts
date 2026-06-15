@@ -1,3 +1,4 @@
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -5,9 +6,7 @@ plugins {
     kotlin("plugin.serialization") version "2.2.0"
     id("org.jetbrains.kotlinx.kover") version "0.9.1"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3"
-    `maven-publish`
-    `java-library`
-    signing
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 group = "com.beespoon"
@@ -50,11 +49,6 @@ kotlin {
     }
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
 tasks.withType<AbstractArchiveTask>().configureEach {
     isPreserveFileTimestamps = false
     isReproducibleFileOrder = true
@@ -91,60 +85,35 @@ tasks.named("check") {
     dependsOn(tasks.named("koverVerify"))
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
 
-            groupId = "com.beespoon"
-            artifactId = "apollo"
-            version = project.version.toString()
+    coordinates("com.beespoon", "apollo", project.version.toString())
 
-            pom {
-                name.set("Apollo")
-                description.set("Minimal hot-reload configuration management for the JVM")
-                url.set("https://github.com/beespoon/apollo")
+    pom {
+        name.set("Apollo")
+        description.set("Minimal hot-reload configuration management for the JVM")
+        url.set("https://github.com/BSpoones/Apollo")
 
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
-                    }
-                }
-
-                developers {
-                    developer {
-                        id.set("beespoon")
-                        name.set("BeeSpoon")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git:git://github.com/beespoon/apollo.git")
-                    developerConnection.set("scm:git:ssh://github.com/beespoon/apollo.git")
-                    url.set("https://github.com/beespoon/apollo")
-                }
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://opensource.org/licenses/MIT")
             }
         }
-    }
 
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/beespoon/apollo")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+        developers {
+            developer {
+                id.set("beespoon")
+                name.set("BeeSpoon")
             }
         }
+
+        scm {
+            connection.set("scm:git:git://github.com/BSpoones/Apollo.git")
+            developerConnection.set("scm:git:ssh://github.com/BSpoones/Apollo.git")
+            url.set("https://github.com/BSpoones/Apollo")
+        }
     }
-}
-
-signing {
-    setRequired { gradle.taskGraph.hasTask("publish") }
-    sign(publishing.publications["maven"])
-}
-
-tasks.named("signMavenPublication") {
-    enabled = project.hasProperty("signing.keyId")
 }
