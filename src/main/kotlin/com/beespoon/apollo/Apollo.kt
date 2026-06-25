@@ -170,7 +170,7 @@ public class Apollo internal constructor(builder: ApolloBuilder) : AutoCloseable
             explicitNamespace?.takeIf(String::isNotEmpty) ?: namespaceResolver?.invoke(clazz, clazz.java.classLoader)
                 ?.takeIf(String::isNotEmpty)
         val root = namespace?.let { File(basePath, it) } ?: basePath
-        return if (nested) File(root, "$name/$name.$format") else File(root, "$name.$format")
+        return if (nested) File(root, "$name/${name.substringAfterLast('/')}.$format") else File(root, "$name.$format")
     }
 
     internal fun start(registrations: List<ApolloBuilder.Registration>) {
