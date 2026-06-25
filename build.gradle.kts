@@ -11,7 +11,7 @@ plugins {
 
 group = "com.bee-spoon"
 
-version = findProperty("version")?.toString()?.takeUnless { it == "unspecified" } ?: "1.0"
+version = property("version") as String
 
 repositories {
     mavenCentral()
